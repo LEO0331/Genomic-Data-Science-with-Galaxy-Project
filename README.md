@@ -1,4 +1,4 @@
-# Genomic-Data-Science-with-Galaxy-Project
+# Genomic Data Science with Galaxy (Project)
 
 The project analyzes DNA polymorphic sites of father-mother-child re-sequencing data constructed from an Illumina MiSeq sequencer sequenced as paired ends (R1/R2) to 125bp in length.
 
