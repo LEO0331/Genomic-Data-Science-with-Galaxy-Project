@@ -36,6 +36,5 @@ step 13: Count polymorphic sites - use Group (version: 2.1.1, by gene name) to c
 
 step 14: Sort results in step 13 - use Sort (version: 1.1.0, by descending)
 
+[WorkFlow Preview](https://usegalaxy.org/published/workflow?id=528ed34505b1a993)
 [WorkFlow](https://usegalaxy.org/u/lichengchen/w/workflow-constructed-from-history-chen-li-cheng-course-project-1)
-
-[History for Analyses](https://usegalaxy.org:/u/lichengchen/h/chen-li-cheng-course-project)
