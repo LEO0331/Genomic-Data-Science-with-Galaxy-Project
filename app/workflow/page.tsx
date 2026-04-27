@@ -10,7 +10,12 @@ export default function WorkflowPage() {
         title="Variant Calling Workflow"
         description="The pipeline below shows the actual sequence used to process father-mother-child paired-end sequencing data, from raw FASTQ inputs to annotated and gene-level variant reporting."
       />
-      <WorkflowTimeline steps={workflowSteps} />
+      <section aria-labelledby="workflow-steps-heading" className="space-y-4">
+        <h2 id="workflow-steps-heading" className="display-title text-2xl text-white sm:text-3xl">
+          Workflow Steps
+        </h2>
+        <WorkflowTimeline steps={workflowSteps} />
+      </section>
     </div>
   );
 }
