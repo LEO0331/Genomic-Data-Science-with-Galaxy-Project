@@ -24,8 +24,8 @@ export function VariantSummaryCards({ variants }: VariantSummaryCardsProps) {
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {stats.map((stat) => (
         <article key={stat.label} className="card-surface p-4">
-          <p className="text-xs uppercase tracking-wide text-slate-400">{stat.label}</p>
-          <p className="mt-2 font-mono text-2xl text-cyan-200">{stat.value}</p>
+          <p className="text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">{stat.label}</p>
+          <p className="mono-data mt-2 text-2xl text-[var(--accent)]">{stat.value}</p>
         </article>
       ))}
     </div>

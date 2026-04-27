@@ -1,0 +1,44 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Run Lighthouse CI
+        id: lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      - name: Add report URLs to job summary
+        env:
+          LINKS: ${{ steps.lighthouse.outputs.links }}
+        run: |
+          node -e "const raw=process.env.LINKS||'[]';let data;try{data=JSON.parse(raw);}catch{data=[raw];}const links=Array.isArray(data)?data:Object.values(data||{});console.log('### Lighthouse temporary report URLs');if(!links.length){console.log('- (none reported)');process.exit(0);}for(const link of links){console.log('- '+link);} " >> "$GITHUB_STEP_SUMMARY"

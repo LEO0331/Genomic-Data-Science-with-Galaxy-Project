@@ -6,19 +6,17 @@ type VariantTableProps = {
 
 export function VariantTable({ variants }: VariantTableProps) {
   if (variants.length === 0) {
-    return (
-      <div className="card-surface p-6 text-sm text-slate-300">No variants match the current filters.</div>
-    );
+    return <div className="card-surface p-6 text-sm text-[var(--text-muted)]">No variants match the current filters.</div>;
   }
 
   return (
     <div className="card-surface overflow-x-auto">
       <table className="min-w-full text-left text-sm">
-        <thead className="bg-slate-900">
-          <tr className="border-b border-slate-800">
+        <thead className="bg-[rgba(217,237,255,0.03)]">
+          <tr className="border-b border-[var(--line)]">
             {["Chromosome", "Position", "ID", "Reference", "Alternate", "Quality", "Filter", "Info", "Type"].map(
               (column) => (
-                <th key={column} className="whitespace-nowrap px-3 py-3 font-semibold text-slate-200">
+                <th key={column} className="whitespace-nowrap px-3 py-3 font-semibold text-[var(--text)]">
                   {column}
                 </th>
               )
@@ -27,18 +25,21 @@ export function VariantTable({ variants }: VariantTableProps) {
         </thead>
         <tbody>
           {variants.map((variant, idx) => (
-            <tr key={`${variant.chrom}-${variant.pos}-${variant.ref}-${variant.alt}-${idx}`} className="border-b border-slate-800/80">
-              <td className="px-3 py-2 font-mono">{variant.chrom}</td>
-              <td className="px-3 py-2 font-mono">{variant.pos}</td>
-              <td className="px-3 py-2 font-mono">{variant.id}</td>
-              <td className="px-3 py-2 font-mono">{variant.ref}</td>
-              <td className="px-3 py-2 font-mono">{variant.alt}</td>
-              <td className="px-3 py-2 font-mono">{variant.qual}</td>
-              <td className="px-3 py-2 font-mono">{variant.filter}</td>
-              <td className="max-w-[280px] truncate px-3 py-2 font-mono text-xs" title={variant.info}>
+            <tr
+              key={`${variant.chrom}-${variant.pos}-${variant.ref}-${variant.alt}-${idx}`}
+              className="border-b border-[var(--line)]/80 transition hover:bg-[rgba(143,243,223,0.06)]"
+            >
+              <td className="mono-data px-3 py-2">{variant.chrom}</td>
+              <td className="mono-data px-3 py-2">{variant.pos}</td>
+              <td className="mono-data px-3 py-2">{variant.id}</td>
+              <td className="mono-data px-3 py-2">{variant.ref}</td>
+              <td className="mono-data px-3 py-2">{variant.alt}</td>
+              <td className="mono-data px-3 py-2">{variant.qual}</td>
+              <td className="mono-data px-3 py-2">{variant.filter}</td>
+              <td className="mono-data max-w-[300px] truncate px-3 py-2 text-xs" title={variant.info}>
                 {variant.info}
               </td>
-              <td className="px-3 py-2 text-cyan-200">{variant.type}</td>
+              <td className="px-3 py-2 text-[var(--accent)]">{variant.type}</td>
             </tr>
           ))}
         </tbody>
