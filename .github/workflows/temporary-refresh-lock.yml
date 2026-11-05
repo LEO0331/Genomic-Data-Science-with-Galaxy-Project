@@ -22,7 +22,6 @@ jobs:
       - name: Refresh package-lock from npm registry
         run: |
           npm install --global npm@11
-          rm package-lock.json
           if ! npm install --package-lock-only --ignore-scripts --no-audit --no-fund; then
             echo 'npm debug tail:'
             find "$HOME/.npm/_logs" -type f -name '*debug-0.log' -print | sort | tail -1 | xargs -r tail -n 100
