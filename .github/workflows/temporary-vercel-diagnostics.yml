@@ -1,0 +1,40 @@
+name: Temporary Vercel Deployment Diagnosis
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/temporary-vercel-diagnostics.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Inspect stalled production deployments (read-only)
+        shell: bash
+        run: |
+          set -u
+          if [ -z "${VERCEL_TOKEN:-}" ]; then
+            echo "VERCEL_TOKEN is not configured for this job"
+            exit 1
+          fi
+          npm install --global vercel@65.11.0
+          for id in DYd6DCtVn91yP5WvdfpZ2fxF2KJb H8sSRaUwR2VjZw8MLQpUdZrzrY9x; do
+            echo "::group::Vercel deployment metadata: $id"
+            timeout 80s vercel inspect "$id" --scope=leo0331s-projects --token="$VERCEL_TOKEN" || echo "Unable to inspect metadata for $id"
+            echo "::endgroup::"
+            echo "::group::Vercel build logs: $id"
+            timeout 80s vercel inspect "$id" --logs --scope=leo0331s-projects --token="$VERCEL_TOKEN" || echo "No accessible build logs for $id"
+            echo "::endgroup::"
+          done
