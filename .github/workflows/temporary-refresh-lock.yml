@@ -1,0 +1,36 @@
+name: Temporary lockfile refresh for security fixes
+
+on:
+  push:
+    branches:
+      - fix/tailwind-postcss-vite-ci-20261105
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh package-lock from npm registry
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Commit package-lock without changing package.json
+        run: |
+          if ! git diff --quiet -- package.json; then
+            echo 'npm unexpectedly changed package.json' >&2
+            exit 1
+          fi
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'chore: refresh lockfile for Tailwind PostCSS and patched Vite'
+            git push origin HEAD:fix/tailwind-postcss-vite-ci-20261105
+          fi
