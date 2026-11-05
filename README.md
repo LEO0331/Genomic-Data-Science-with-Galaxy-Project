@@ -83,6 +83,19 @@ Required deployment secrets:
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
+Vercel production deploys are submitted without an indefinite CLI wait and then
+checked for a **READY** status. The workflow fails on a **BLOCKED**, **ERROR**, or
+timed-out deployment, even if local builds and tests pass.
+
+If Vercel reports `The deployment was blocked because the commit author doesn’t
+have permission to create deployments for this project`, verify that the
+commit author's GitHub account is connected to the Vercel team/project:
+[Vercel Account Authentication](https://vercel.com/account/settings/authentication).
+For a private repository on a Hobby team, the author must be the team's owner;
+on a Pro team, the author needs project/team access. Also verify that the
+GitHub commit email resolves to the connected account. Changing the CI token
+or increasing the timeout will not bypass Vercel authorization.
+
 ## Public Artifacts
 
 Bundled web-safe artifacts:

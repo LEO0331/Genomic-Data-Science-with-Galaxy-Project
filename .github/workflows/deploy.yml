@@ -52,5 +52,22 @@ jobs:
       - name: Build Vercel output
         run: npx vercel@latest build --prod --token="$VERCEL_TOKEN"
 
-      - name: Deploy to Vercel Production
-        run: npx vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - name: Submit Vercel production deployment
+        id: vercel_deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Do not block indefinitely waiting for Vercel's remote build/authorization checks.
+          deployment_url="$(npx vercel@latest deploy --prebuilt --prod --no-wait --token="$VERCEL_TOKEN")"
+          if [[ "$deployment_url" != https://* ]]; then
+            echo "::error::Vercel did not return a deployment URL."
+            exit 1
+          fi
+          echo "Deployment submitted: $deployment_url"
+          echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Vercel production deployment
+        shell: bash
+        env:
+          DEPLOYMENT_URL: ${{ steps.vercel_deployment.outputs.deployment_url }}
+        run: bash .github/scripts/verify-vercel-deployment.sh "$DEPLOYMENT_URL"
