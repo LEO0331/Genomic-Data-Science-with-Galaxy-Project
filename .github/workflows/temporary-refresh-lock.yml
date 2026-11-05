@@ -20,7 +20,9 @@ jobs:
         with:
           node-version: '22'
       - name: Refresh package-lock from npm registry
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+        run: |
+          rm package-lock.json
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
       - name: Commit package-lock without changing package.json
         run: |
           if ! git diff --quiet -- package.json; then
